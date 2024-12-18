@@ -55,10 +55,10 @@ PetCam/
 3. **Generate Self-Signed Certificate:**
 
     *   If you don't have OpenSSL, install it (e.g., `sudo apt install openssl` on Debian/Ubuntu).
-    *   Run the following command in the `server` directory, **replacing `192.168.1.10` with your server's actual LAN IP address**:
+    *   Run the following command in the root directory, **replacing `192.168.1.10` with your server's actual LAN IP address**:
 
         ```bash
-        openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -sha256 -days 365 -nodes -subj "/C=US/ST=CA/L=San Francisco/O=MyOrg/CN=192.168.1.10" -addext "subjectAltName=IP:192.168.1.10,DNS:localhost,IP:127.0.0.1" -addext "extendedKeyUsage=serverAuth"
+        openssl req -x509 -newkey rsa:4096 -keyout server/key.pem -out server/cert.pem -sha256 -days 365 -nodes -subj "/C=US/ST=CA/L=San Francisco/O=MyOrg/CN=192.168.1.10" -addext "subjectAltName=IP:192.168.1.10,DNS:localhost,IP:127.0.0.1" -addext "extendedKeyUsage=serverAuth"
         ```
 
     *   This will create `key.pem` (private key) and `cert.pem` (certificate) files in the `server` directory.
@@ -68,7 +68,6 @@ PetCam/
 1. **Start the Server:**
 
     ```bash
-    cd server
     npm start
     ```
 
