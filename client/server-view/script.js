@@ -4,7 +4,9 @@ const serverPort = window.location.port;
 // Construct the WebSocket URL (use wss for HTTPS)
 const ws = new WebSocket(`wss://${serverAddress}:${serverPort}`);
 const remoteVideo = document.getElementById('remoteVideo');
+const talkButton = document.getElementById('talkButton');
 let peerConnection;
+let audioStream;
 
 const config = {
     iceServers: [
@@ -21,18 +23,24 @@ function createPeerConnection() {
     try {
         peerConnection = new RTCPeerConnection(config);
 
+        // Handle incoming tracks
         peerConnection.ontrack = event => {
             console.log("Got track", event);
             if (event.streams && event.streams[0]) {
                 console.log("Setting remote stream");
-                remoteVideo.srcObject = event.streams[0];
+                if (event.track.kind === 'video') {
+                    remoteVideo.srcObject = event.streams[0];
+                }
             } else {
                 console.log("Adding track to new MediaStream");
                 const inboundStream = new MediaStream([event.track]);
-                remoteVideo.srcObject = inboundStream;
+                if (event.track.kind === 'video') {
+                    remoteVideo.srcObject = inboundStream;
+                }
             }
         };
 
+        // Handle ICE candidates
         peerConnection.onicecandidate = event => {
             console.log("ICE candidate:", event.candidate);
             if (event.candidate) {
@@ -40,10 +48,12 @@ function createPeerConnection() {
             }
         };
 
+        // Handle connection state changes
         peerConnection.onconnectionstatechange = event => {
             console.log("Connection state change:", peerConnection.connectionState);
         };
 
+        // Handle ICE gathering state changes
         peerConnection.onicegatheringstatechange = event => {
             console.log("ICE gathering state change:", peerConnection.iceGatheringState);
         };
@@ -51,6 +61,29 @@ function createPeerConnection() {
         console.log("RTCPeerConnection created successfully");
     } catch (error) {
         console.error("Error creating RTCPeerConnection:", error);
+    }
+}
+
+async function enableAudio() {
+    try {
+        console.log("Enabling audio stream");
+        audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+
+        // Add audio track to peer connection
+        audioStream.getTracks().forEach(track => {
+            console.log("Adding audio track:", track);
+            peerConnection.addTrack(track, audioStream);
+        });
+
+        // Renegotiate the connection
+        console.log("Renegotiating connection");
+        const offer = await peerConnection.createOffer();
+        await peerConnection.setLocalDescription(offer);
+        ws.send(JSON.stringify({ type: 'offer', offer: peerConnection.localDescription }));
+
+        console.log("Audio stream enabled");
+    } catch (error) {
+        console.error('Error accessing microphone:', error);
     }
 }
 
@@ -97,3 +130,9 @@ ws.onmessage = (event) => {
 ws.onerror = (error) => {
     console.error('WebSocket error:', error);
 };
+
+talkButton.addEventListener('click', () => {
+    console.log("Talk button clicked");
+    enableAudio();
+    talkButton.disabled = true; // Disable the button after it's clicked
+});

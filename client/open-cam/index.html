@@ -4,7 +4,7 @@
     <title>Open Camera</title>
     <style>
         #localVideo {
-            transform: scaleX(-1); /* Flip horizontally */
+            transform: scaleX(-1); /* Flip video horizontally */
             width: 100%;
             max-width: 640px;
             height: auto;
@@ -14,6 +14,7 @@
 <body>
     <h1>Open Camera</h1>
     <video id="localVideo" autoplay playsinline></video>
-    <canvas id="hiddenCanvas" style="display: none;"></canvas> <script src="script.js"></script>
+    <canvas id="hiddenCanvas" style="display: none;"></canvas>
+    <audio id="remoteAudio" autoplay></audio> <script src="script.js"></script>
 </body>
 </html>

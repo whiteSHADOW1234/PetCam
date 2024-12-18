@@ -6,8 +6,10 @@ const ws = new WebSocket(`wss://${serverAddress}:${serverPort}`);
 const videoElement = document.getElementById('localVideo');
 const canvasElement = document.getElementById('hiddenCanvas');
 const canvasCtx = canvasElement.getContext('2d');
+const remoteAudio = document.getElementById('remoteAudio'); // Get the audio element
 let localStream;
 let peerConnection;
+let audioStream;
 
 const config = {
     iceServers: [
@@ -39,8 +41,6 @@ async function startCamera() {
             canvasElement.height = videoElement.videoHeight;
             drawFlippedVideoToCanvas();
 
-            // Call createPeerConnection *after* obtaining the local stream
-            createPeerConnection();
         } else {
             console.error('No video input devices found.');
         }
@@ -54,11 +54,31 @@ function createPeerConnection() {
     try {
         peerConnection = new RTCPeerConnection(config);
 
-        // Add local stream's tracks to peer connection *after* the peer connection is created
+        // Add local stream's tracks to peer connection
         localStream.getTracks().forEach(track => {
             console.log("Adding track to peer connection:", track);
             peerConnection.addTrack(track, localStream);
         });
+
+        peerConnection.ontrack = event => {
+            console.log("Got track", event);
+            if (event.streams && event.streams[0]) {
+                console.log("Setting remote stream");
+                // remoteVideo.srcObject = event.streams[0];
+                if (event.track.kind === 'audio') {
+                    console.log("Setting remote audio stream");
+                    remoteAudio.srcObject = event.streams[0];
+                }
+            } else {
+                console.log("Adding track to new MediaStream");
+                const inboundStream = new MediaStream([event.track]);
+                // remoteVideo.srcObject = inboundStream;
+                if (event.track.kind === 'audio') {
+                    console.log("Setting remote audio stream");
+                    remoteAudio.srcObject = inboundStream;
+                }
+            }
+        };
 
         peerConnection.onicecandidate = event => {
             console.log("ICE candidate:", event.candidate);
@@ -99,6 +119,8 @@ ws.onopen = () => {
     console.log('WebSocket connected');
     ws.send(JSON.stringify({ type: 'register', role: 'open-cam' }));
     startCamera();
+    // Create peer connection after starting camera and registering
+    setTimeout(createPeerConnection, 1000);
 };
 
 ws.onmessage = (event) => {
