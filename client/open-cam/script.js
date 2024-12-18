@@ -9,7 +9,6 @@ const canvasCtx = canvasElement.getContext('2d');
 const remoteAudio = document.getElementById('remoteAudio'); // Get the audio element
 let localStream;
 let peerConnection;
-let audioStream;
 
 const config = {
     iceServers: [
@@ -37,6 +36,7 @@ async function startCamera() {
             });
 
             videoElement.srcObject = localStream;
+            videoElement.muted = true; // Mute the local video element
             canvasElement.width = videoElement.videoWidth;
             canvasElement.height = videoElement.videoHeight;
             drawFlippedVideoToCanvas();
@@ -64,7 +64,6 @@ function createPeerConnection() {
             console.log("Got track", event);
             if (event.streams && event.streams[0]) {
                 console.log("Setting remote stream");
-                // remoteVideo.srcObject = event.streams[0];
                 if (event.track.kind === 'audio') {
                     console.log("Setting remote audio stream");
                     remoteAudio.srcObject = event.streams[0];
@@ -72,7 +71,6 @@ function createPeerConnection() {
             } else {
                 console.log("Adding track to new MediaStream");
                 const inboundStream = new MediaStream([event.track]);
-                // remoteVideo.srcObject = inboundStream;
                 if (event.track.kind === 'audio') {
                     console.log("Setting remote audio stream");
                     remoteAudio.srcObject = inboundStream;
