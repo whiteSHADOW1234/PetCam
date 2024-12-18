@@ -2,19 +2,18 @@
 <html>
 <head>
     <title>Open Camera</title>
-    <style>
-        #localVideo {
-            transform: scaleX(-1); /* Flip video horizontally */
-            width: 100%;
-            max-width: 640px;
-            height: auto;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Open Camera</h1>
-    <video id="localVideo" autoplay playsinline></video>
-    <canvas id="hiddenCanvas" style="display: none;"></canvas>
-    <audio id="remoteAudio" autoplay></audio> <script src="script.js"></script>
+    <div class="container">
+        <h1>Open Camera</h1>
+        <div class="video-wrapper">
+            <video id="localVideo" autoplay playsinline></video>
+            <canvas id="hiddenCanvas"></canvas>
+        </div>
+        <p id="status">Connecting...</p>
+        <audio id="remoteAudio" autoplay></audio>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>
