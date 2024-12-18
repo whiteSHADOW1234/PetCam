@@ -1,4 +1,4 @@
-# Real-time Webcam Streaming with WebRTC
+# PetCam: A Real-time Webcam Streaming with WebRTC
 This project demonstrates a real-time webcam streaming application using WebRTC for video and audio transmission. It consists of a server, an "open-cam" client (the source of the webcam stream), and a "server-view" client (a web page to display the stream).
 
 ## Features
@@ -12,7 +12,7 @@ This project demonstrates a real-time webcam streaming application using WebRTC 
 
 ## Project Structure
 ```
-pet-camera-project/
+PetCam/
 ├── server/
 │ ├── server.js # Node.js server with WebRTC signaling
 │ ├── key.pem # SSL private key (self-signed for testing)
@@ -32,21 +32,23 @@ pet-camera-project/
 
 *   **Node.js and npm:** Make sure you have Node.js and npm (or yarn) installed on your server machine.
 *   **OpenSSL:** You'll need OpenSSL to generate self-signed certificates for HTTPS. It's often included with Git on Windows and comes pre-installed on most Linux/macOS systems.
-*   **Web Browser:** A modern web browser that supports WebRTC (e.g., Chrome, Firefox, Edge).
+*   **Web Browser:** A modern web browser that supports WebRTC (e.g., Brave, Firefox, Edge). **You might see an "Advanced" button; click it, then click "Accept the Risk and Continue." Also don't forget to grant camera and microphone permissions.**
+
+> [!NOTE]  
+> **DO NOT USE Chrome AS YOUR WEB BROWSER, OR THIS ENTIRE PROJECT WILL FAIL !!!!!**
 
 ## Installation
 
 1. **Clone the repository:**
 
     ```bash
-    git clone <repository_url>
-    cd pet-camera-project
+    git clone https://github.com/whiteSHADOW1234/PetCam.git
+    cd PetCam
     ```
 
-2. **Install server dependencies:**
+2. **Install dependencies:**
 
     ```bash
-    cd server
     npm install
     ```
 
@@ -67,7 +69,7 @@ pet-camera-project/
 
     ```bash
     cd server
-    node server.js
+    npm start
     ```
 
     The server will start running on `https://0.0.0.0:5000`. The console will also output URLs you can use to access the `open-cam` and `server-view` pages using your server's LAN IP address.
@@ -110,12 +112,11 @@ pet-camera-project/
     *   Examine the console logs of the `open-cam` browser, the `server-view` browser, and the server itself for any error messages.
     *   Use the browser's "Network" tab (in developer tools) to inspect WebSocket messages and check if the offer, answer, and ICE candidates are being exchanged correctly.
     *   Verify that the `RTCPeerConnection` on the `server-view` side is successfully established and that the `ontrack` event is firing.
+    *   If there's no error found, refresh both `open-cam` and `server-view` site until this issue was solved.
 
 ## Future Improvements
 
-*   **Audio Streaming:** Add support for audio capture and streaming.
 *   **Multiple Open-Cam Clients:** Modify the server to handle multiple `open-cam` clients and allow selection of the desired stream on the `server-view` side.
-*   **User Interface:** Enhance the user interface of both the `open-cam` and `server-view` websites.
 *   **Security:** Implement proper authentication and authorization for a production environment.
 *   **Scalability:** Integrate a dedicated media server (e.g., Kurento, Janus) for improved performance and scalability with multiple clients.
 *   **Production Deployment:** Obtain a valid SSL certificate from a trusted CA, configure a domain name, and set up a robust deployment environment for production use.
