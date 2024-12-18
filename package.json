@@ -1,0 +1,17 @@
+{
+    "name": "pet-camera-project",
+    "version": "1.0.0",
+    "description": "Real-time Pet Camera",
+    "main": "server/server.js",
+    "scripts": {
+        "start": "node server/server.js"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "express": "^4.18.2",
+        "ip": "^2.0.1",
+        "ws": "^8.14.2"
+    }
+}
