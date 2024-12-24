@@ -21,11 +21,11 @@ PetCam/
 │ ├── index.html # Server landing page
 │ └── server-view.html # Website to view stream
 └── client/
-└── open-cam/
-├── index.html # Website to start camera
-└── script.js # JavaScript to handle camera, WebRTC, and streaming
-└── server-view/
-└── script.js # JavaScript for WebRTC receiving logic
+  └── open-cam/
+    ├── index.html # Website to start camera
+    └── script.js # JavaScript to handle camera, WebRTC, and streaming
+      └── server-view/
+        └── script.js # JavaScript for WebRTC receiving logic
 ```
 
 ## Prerequisites
