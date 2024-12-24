@@ -4,7 +4,6 @@ const serverPort = window.location.port;
 // Construct the WebSocket URL (use wss for HTTPS)
 const ws = new WebSocket(`wss://${serverAddress}:${serverPort}`);
 const remoteVideo = document.getElementById('remoteVideo');
-const talkButton = document.getElementById('talkButton');
 let peerConnection;
 let audioStream;
 
@@ -130,9 +129,3 @@ ws.onmessage = (event) => {
 ws.onerror = (error) => {
     console.error('WebSocket error:', error);
 };
-
-talkButton.addEventListener('click', () => {
-    console.log("Talk button clicked");
-    enableAudio();
-    talkButton.disabled = true; // Disable the button after it's clicked
-});

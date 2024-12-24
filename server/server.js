@@ -100,6 +100,6 @@ const HOST = '0.0.0.0';
 server.listen(PORT, HOST, () => {
     const localIpAddress = ip.address();
     console.log(`Server started on https://${HOST}:${PORT}`);
-    console.log(`Open Cam: https://${localIpAddress}:${PORT}/client/open-cam`);
+    console.log(`Open Cam: https://192.168.31.193:${PORT}/client/open-cam`);
     console.log(`Server View: https://${localIpAddress}:${PORT}/server-view`);
 });
