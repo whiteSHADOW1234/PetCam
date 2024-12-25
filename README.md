@@ -86,15 +86,15 @@ PetCam/
     *   Go to `https://<your_server_ip>:5000/server-view`.
     *   You should see the video stream from the `open-cam` device.
 
-**Important Notes:**
-
-*   **HTTPS:** Access both websites using `https://` to ensure secure connections and allow `getUserMedia` to work correctly.
-*   **Self-Signed Certificate:** Since you're using a self-signed certificate, your browser will display a security warning. You'll need to add a temporary exception in your browser to proceed during development. **For production, you must use a valid certificate from a trusted Certificate Authority (CA).**
-*   **Firewall:** Make sure your server's firewall allows incoming connections on port 5000.
-*   **LAN Access:** The provided URLs will only work for devices on the same local network (LAN) as your server.
-*   **Performance:** The performance of the video stream might vary depending on network conditions and the encoding/decoding process.
-*   **Audio:** This current implementation does not include audio streaming, which will require further development.
-*   **Scalability:** This setup is suitable for testing and a limited number of viewers. For a more scalable solution, consider using a dedicated media server like Kurento, Janus, or Jitsi.
+> [!IMPORTANT]  
+>
+> *   **HTTPS:** Access both websites using `https://` to ensure secure connections and allow `getUserMedia` to work correctly.
+> *   **Self-Signed Certificate:** Since you're using a self-signed certificate, your browser will display a security warning. You'll need to add a temporary exception in your browser to proceed during development. **For production, you must use a valid certificate from a trusted Certificate Authority (CA).**
+> *   **Firewall:** Make sure your server's firewall allows incoming connections on port 5000.
+> *   **LAN Access:** The provided URLs will only work for devices on the same local network (LAN) as your server.
+> *   **Performance:** The performance of the video stream might vary depending on network conditions and the encoding/decoding process.
+> *   **Audio:** This current implementation does not include audio streaming, which will require further development.
+> *   **Scalability:** This setup is suitable for testing and a limited number of viewers. For a more scalable solution, consider using a dedicated media server like Kurento, Janus, or Jitsi.
 
 ## Troubleshooting
 
