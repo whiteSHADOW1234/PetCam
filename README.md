@@ -71,19 +71,19 @@ PetCam/
     npm start
     ```
 
-    The server will start running on `https://0.0.0.0:5000`. The console will also output URLs you can use to access the `open-cam` and `server-view` pages using your server's LAN IP address.
+    The console will output all URLs you can use to access the `open-cam` and `server-view` pages using your server's LAN IP address.
 
 2. **Access the Open-Cam Website:**
 
     *   Open a web browser on the device with the webcam you want to use.
-    *   Go to `https://<your_server_ip>:5000/client/open-cam`.
-    *   Replace `<your_server_ip>` with your server's actual LAN IP address.
+    *   Go to `https://<avaliable_LAN_ip>:5000/client/open-cam`.
+    *   Replace `<avaliable_LAN_ip>` with your server's actual LAN IP address.
     *   Grant the website permission to access your camera and microphone when prompted by the browser.
 
 3. **Access the Server View Website:**
 
     *   Open another web browser (on any device on your LAN).
-    *   Go to `https://<your_server_ip>:5000/server-view`.
+    *   Go to `https://<avaliable_LAN_ip>:5000/server-view`.
     *   You should see the video stream from the `open-cam` device.
 
 > [!IMPORTANT]  
