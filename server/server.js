@@ -3,6 +3,7 @@ const https = require('https');
 const WebSocket = require('ws');
 const path = require('path');
 const ip = require('ip');
+const os = require('os');
 const fs = require('fs');
 
 const app = express();
@@ -93,13 +94,34 @@ app.get('/server-view', (req, res) => {
     res.sendFile(path.join(__dirname, 'templates', 'server-view.html')); // Serve the server view page
 });
 
+// --- Function to Get All Accessible IP Addresses ---
+function getAccessibleIpAddresses() {
+    const interfaces = os.networkInterfaces();
+    const ipAddresses = [];
+
+    for (const interfaceName in interfaces) {
+        const iface = interfaces[interfaceName];
+        for (const alias of iface) {
+            if (alias.family === 'IPv4' && alias.address !== '127.0.0.1' && !alias.internal) {
+                ipAddresses.push(alias.address);
+            }
+        }
+    }
+
+    return ipAddresses;
+}
+
 // --- Start the Server ---
 const PORT = process.env.PORT || 5000;
 const HOST = '0.0.0.0';
 
 server.listen(PORT, HOST, () => {
-    const localIpAddress = ip.address();
+    const ipAddresses = getAccessibleIpAddresses();
     console.log(`Server started on https://${HOST}:${PORT}`);
-    console.log(`Open Cam: https://192.168.31.193:${PORT}/client/open-cam`);
-    console.log(`Server View: https://${localIpAddress}:${PORT}/server-view`);
+
+    ipAddresses.forEach(ipAddress => {
+        console.log(`Accessible URLs for IP address ${ipAddress}:`);
+        console.log(`- Open Cam: https://${ipAddress}:${PORT}/client/open-cam`);
+        console.log(`- Server View: https://${ipAddress}:${PORT}/server-view`);
+    });
 });
