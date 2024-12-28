@@ -18,8 +18,8 @@ PetCam/
 │ ├── key.pem # SSL private key (self-signed for testing)
 │ └── cert.pem # SSL certificate (self-signed for testing)
 │ └── templates/
-│ ├── index.html # Server landing page
-│ └── server-view.html # Website to view stream
+│   ├── index.html # Server landing page
+│   └── server-view.html # Website to view stream
 └── client/
   └── open-cam/
     ├── index.html # Website to start camera
