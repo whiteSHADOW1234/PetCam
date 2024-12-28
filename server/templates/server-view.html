@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Server View</title>
     <style>
@@ -37,7 +38,8 @@
         #remoteVideo {
             width: 100%;
             height: auto;
-            background-color: #000; /* Prevent white flash before video loads */
+            background-color: #000;
+            /* Prevent white flash before video loads */
         }
 
         #Button {
@@ -65,6 +67,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>Pet Cam View</h1>
@@ -74,5 +77,14 @@
         <!-- <button id="Button">Direction Button</button> -->
     </div>
     <script src="/client/server-view/script.js"></script>
+    <button id="sendButton">Send Message to ESP32</button>
+    <script>
+        document.getElementById('sendButton').addEventListener('click', () => {
+            fetch('/send-to-esp32', { method: 'POST' })
+                .then(response => console.log('Message sent!'))
+                .catch(error => console.error('Error sending message:', error));
+        });
+    </script>
 </body>
+
 </html>
