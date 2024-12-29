@@ -42,35 +42,7 @@
             /* Prevent white flash before video loads */
         }
 
-        #Button {
-            background-color: #4CAF50;
-            border: none;
-            color: white;
-            padding: 10px 20px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 4px 2px;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
-
-        #Button:hover {
-            background-color: #45a049;
-        }
-
-        #Button:disabled {
-            background-color: #ccc;
-            cursor: default;
-        }
-
-        .button-container {
-            margin-top: 20px;
-        }
-
-        .control-button {
+        .control-button, .connect-button, .disconnect-button {
             background-color: #4CAF50;
             border: none;
             color: white;
@@ -85,8 +57,39 @@
             transition: background-color 0.3s;
         }
 
-        .control-button:hover {
+        .control-button:hover, .connect-button:hover, .disconnect-button:hover {
             background-color: #45a049;
+        }
+
+        .control-button:disabled, .disconnect-button:disabled {
+            background-color: #ccc;
+            cursor: default;
+        }
+
+        .button-container {
+            margin-top: 20px;
+        }
+
+        .input-group {
+            margin-bottom: 10px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .input-group input {
+            width: 200px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        #statusMessage {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #555;
         }
     </style>
 </head>
@@ -94,27 +97,120 @@
 <body>
     <div class="container">
         <h1>Pet Cam View</h1>
+        <div class="input-group">
+            <label for="esp32IpInput">ESP32 IP Address:</label>
+            <input type="text" id="esp32IpInput" placeholder="Enter ESP32 IP" value="192.168.31.167">
+            <button id="connectButton" class="connect-button">Connect to ESP32</button>
+        </div>
+        <div id="statusMessage"></div>
         <div class="video-wrapper">
             <video id="remoteVideo" autoplay playsinline></video>
         </div>
         <div class="button-container">
-            <button id="clockwiseButton" class="control-button">Clockwise</button>
-            <button id="counterClockwiseButton" class="control-button">Counter Clockwise</button>
+            <button id="clockwiseButton" class="control-button" disabled>Turn Right</button>
+            <button id="counterClockwiseButton" class="control-button" disabled>Turn Left</button>
+            <button id="disconnectButton" class="disconnect-button" disabled>Disconnect</button>
         </div>
-        <!-- <button id="Button">Direction Button</button> -->
     </div>
-    <script src="/client/server-view/script.js"></script>
-    <script>
-        document.getElementById('clockwiseButton').addEventListener('click', () => {
-            fetch('/control-motor?direction=clockwise', { method: 'POST' })
-                .then(response => console.log('Clockwise command sent!'))
-                .catch(error => console.error('Error sending command:', error));
+    <script src="/client/server-view/script.js"></script> <script>
+        let esp32Ip = ''; // 儲存 ESP32 的 IP 位址
+        const esp32IpInput = document.getElementById('esp32IpInput');
+        const connectButton = document.getElementById('connectButton');
+        const clockwiseButton = document.getElementById('clockwiseButton');
+        const counterClockwiseButton = document.getElementById('counterClockwiseButton');
+        const disconnectButton = document.getElementById('disconnectButton');
+        const statusMessage = document.getElementById('statusMessage');
+
+        // 更新狀態訊息的函數
+        function updateStatus(message) {
+            statusMessage.textContent = message;
+        }
+
+        // 啟用/停用按鈕的函數
+        function setButtonState(button, enabled) {
+            button.disabled = !enabled;
+        }
+
+        // 測試連線的函數
+        async function testEsp32Connection(ip) {
+            updateStatus('Testing connection...');
+            try {
+                // 使用 HTTPS 連線到 ESP32
+                const response = await fetch(`https://${window.location.hostname}:${window.location.port}/test?ip=${ip}`, { method: 'GET' });
+                if (response.ok) {
+                    const responseData = await response.text();
+                    updateStatus(`ESP32 Connected: ${responseData}`);
+                    setButtonState(clockwiseButton, true);
+                    setButtonState(counterClockwiseButton, true);
+                    setButtonState(disconnectButton, true);
+                    esp32Ip = ip; // 儲存 IP 位址
+                    setButtonState(connectButton, false);
+                    esp32IpInput.disabled = true;
+                } else {
+                    updateStatus('ESP32 connection failed');
+                    setButtonState(clockwiseButton, false);
+                    setButtonState(counterClockwiseButton, false);
+                    setButtonState(disconnectButton, false);
+                    esp32Ip = '';
+                    setButtonState(connectButton, true);
+                    esp32IpInput.disabled = false;
+                }
+            } catch (error) {
+                console.error('Error testing ESP32 connection:', error);
+                updateStatus('ESP32 connection error');
+                setButtonState(clockwiseButton, false);
+                setButtonState(counterClockwiseButton, false);
+                setButtonState(disconnectButton, false);
+                esp32Ip = '';
+                setButtonState(connectButton, true);
+                esp32IpInput.disabled = false;
+            }
+        }
+
+        // 連線按鈕點擊事件
+        connectButton.addEventListener('click', () => {
+            const ip = esp32IpInput.value;
+            if (ip) {
+                testEsp32Connection(ip);
+            } else {
+                updateStatus('Please enter an IP address');
+            }
         });
 
+        // 順時針按鈕點擊事件
+        document.getElementById('clockwiseButton').addEventListener('click', () => {
+            if (esp32Ip) {
+                // 使用 HTTPS 發送控制指令
+                fetch(`/control-motor?direction=clockwise&ip=${esp32Ip}`, { method: 'POST' })
+                    .then(response => console.log('Clockwise command sent!'))
+                    .catch(error => console.error('Error sending command:', error));
+            } else {
+                updateStatus('ESP32 IP not set');
+            }
+        });
+
+        // 逆時針按鈕點擊事件
         document.getElementById('counterClockwiseButton').addEventListener('click', () => {
-            fetch('/control-motor?direction=counterclockwise', { method: 'POST' })
-                .then(response => console.log('Counter clockwise command sent!'))
-                .catch(error => console.error('Error sending command:', error));
+            if (esp32Ip) {
+                // 使用 HTTPS 發送控制指令
+                fetch(`/control-motor?direction=counterclockwise&ip=${esp32Ip}`, { method: 'POST' })
+                    .then(response => console.log('Counter clockwise command sent!'))
+                    .catch(error => console.error('Error sending command:', error));
+            } else {
+                updateStatus('ESP32 IP not set');
+            }
+        });
+
+        // 斷開連線按鈕點擊事件
+        disconnectButton.addEventListener('click', () => {
+            updateStatus('Disconnected from ESP32');
+            setButtonState(clockwiseButton, false);
+            setButtonState(counterClockwiseButton, false);
+            setButtonState(disconnectButton, false);
+            esp32Ip = '';
+            setButtonState(connectButton, true);
+            esp32IpInput.disabled = false;
+            esp32IpInput.value = '';
         });
     </script>
 </body>

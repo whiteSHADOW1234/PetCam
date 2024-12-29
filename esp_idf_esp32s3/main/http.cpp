@@ -7,7 +7,22 @@ static const char *TAG = "http_server";
 extern void rotate_clockwise();
 extern void rotate_counterclockwise();
 
-/* An HTTP POST handler */
+/*  HTTP GET 處理器 - 用於測試與 ESP32 的連線
+ *  當 Node.js 伺服器發送 GET 請求到 /test 路徑時，此函數會被調用。
+ *  它會返回一個表示連線成功的訊息。
+ */
+static esp_err_t http_test_handler(httpd_req_t *req)
+{
+    httpd_resp_set_hdr(req, "Connection", "close");
+    const char resp[] = "Connection test successful!";
+    httpd_resp_send(req, resp, HTTPD_RESP_USE_STRLEN);
+    return ESP_OK;
+}
+
+/* HTTP POST 處理器 - 用於接收來自 Node.js 伺服器的控制指令
+ * 當 Node.js 伺服器發送 POST 請求到 /message 路徑時，此函數會被調用。
+ * 它會解析請求內容，並根據內容控制步進電機。
+ */
 static esp_err_t http_post_handler(httpd_req_t *req)
 {
     char content[100];
@@ -40,6 +55,15 @@ static esp_err_t http_post_handler(httpd_req_t *req)
     return ESP_OK;
 }
 
+// 定義 /test 路徑的 URI 處理器
+static const httpd_uri_t test = {
+    .uri       = "/test",
+    .method    = HTTP_GET, // 使用 HTTP GET 方法
+    .handler   = http_test_handler, // 指定處理函數為 http_test_handler
+    .user_ctx  = NULL
+};
+
+// 定義 /message 路徑的 URI 處理器
 static const httpd_uri_t post = {
     .uri       = "/message",
     .method    = HTTP_POST,
@@ -57,7 +81,8 @@ httpd_handle_t start_webserver(void)
     if (httpd_start(&server, &config) == ESP_OK) {
         // 設定 URI 處理器
         ESP_LOGI(TAG, "Registering URI handlers");
-        httpd_register_uri_handler(server, &post);
+        httpd_register_uri_handler(server, &post); // 註冊 /message 的處理器
+        httpd_register_uri_handler(server, &test); // 註冊 /test 的處理器
         return server;
     }
 

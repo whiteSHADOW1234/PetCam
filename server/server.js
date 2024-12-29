@@ -114,7 +114,7 @@ function getAccessibleIpAddresses() {
 
 // --- Control Motor via ESP32 ---
 app.post('/control-motor', (req, res) => {
-    const esp32Ip = '192.168.31.167'; // 更改為你的 ESP32S3 的 IP 位址
+    const esp32Ip = req.query.ip;
     const direction = req.query.direction; // 取得 direction 參數
 
     let message = '';
@@ -135,6 +135,24 @@ app.post('/control-motor', (req, res) => {
         .catch(error => {
             console.error('Error sending command to ESP32', error);
             res.status(500).send('Error sending command to ESP32');
+        });
+});
+
+// 新增的 /test 路由，用於測試與 ESP32 的連線
+app.get('/test', (req, res) => {
+    const esp32Ip = req.query.ip;
+    if (!esp32Ip) {
+        return res.status(400).send('ESP32 IP is required');
+    }
+
+    axios.get(`http://${esp32Ip}/test`)
+        .then(response => {
+            console.log('ESP32 test successful:', response.data);
+            res.send(response.data); // 將 ESP32 的回應傳回給客戶端
+        })
+        .catch(error => {
+            console.error('ESP32 test failed:', error);
+            res.status(500).send('ESP32 test failed');
         });
 });
 
