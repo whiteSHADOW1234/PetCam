@@ -112,20 +112,29 @@ function getAccessibleIpAddresses() {
     return ipAddresses;
 }
 
-// --- Send Message to ESP32 ---
-app.post('/send-to-esp32', (req, res) => {
-    // 這裡假設你的 ESP32S3 的 IP 是固定的，如果不是，你需要有其他方式取得 IP
+// --- Control Motor via ESP32 ---
+app.post('/control-motor', (req, res) => {
     const esp32Ip = '192.168.31.167'; // 更改為你的 ESP32S3 的 IP 位址
-    const message = 'Hello from Node.js!';
+    const direction = req.query.direction; // 取得 direction 參數
+
+    let message = '';
+    if (direction === 'clockwise') {
+        message = 'clockwise';
+    } else if (direction === 'counterclockwise') {
+        message = 'counterclockwise';
+    } else {
+        res.status(400).send('Invalid direction');
+        return;
+    }
 
     axios.post(`http://${esp32Ip}/message`, message)
         .then(response => {
-            console.log('Message sent to ESP32', response.data);
-            res.send('Message sent to ESP32');
+            console.log('Motor control command sent to ESP32', response.data);
+            res.send('Motor control command sent to ESP32');
         })
         .catch(error => {
-            console.error('Error sending message to ESP32', error);
-            res.status(500).send('Error sending message to ESP32');
+            console.error('Error sending command to ESP32', error);
+            res.status(500).send('Error sending command to ESP32');
         });
 });
 

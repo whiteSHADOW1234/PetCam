@@ -65,6 +65,29 @@
             background-color: #ccc;
             cursor: default;
         }
+
+        .button-container {
+            margin-top: 20px;
+        }
+
+        .control-button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 8px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .control-button:hover {
+            background-color: #45a049;
+        }
     </style>
 </head>
 
@@ -74,15 +97,24 @@
         <div class="video-wrapper">
             <video id="remoteVideo" autoplay playsinline></video>
         </div>
+        <div class="button-container">
+            <button id="clockwiseButton" class="control-button">Clockwise</button>
+            <button id="counterClockwiseButton" class="control-button">Counter Clockwise</button>
+        </div>
         <!-- <button id="Button">Direction Button</button> -->
     </div>
     <script src="/client/server-view/script.js"></script>
-    <button id="sendButton">Send Message to ESP32</button>
     <script>
-        document.getElementById('sendButton').addEventListener('click', () => {
-            fetch('/send-to-esp32', { method: 'POST' })
-                .then(response => console.log('Message sent!'))
-                .catch(error => console.error('Error sending message:', error));
+        document.getElementById('clockwiseButton').addEventListener('click', () => {
+            fetch('/control-motor?direction=clockwise', { method: 'POST' })
+                .then(response => console.log('Clockwise command sent!'))
+                .catch(error => console.error('Error sending command:', error));
+        });
+
+        document.getElementById('counterClockwiseButton').addEventListener('click', () => {
+            fetch('/control-motor?direction=counterclockwise', { method: 'POST' })
+                .then(response => console.log('Counter clockwise command sent!'))
+                .catch(error => console.error('Error sending command:', error));
         });
     </script>
 </body>
