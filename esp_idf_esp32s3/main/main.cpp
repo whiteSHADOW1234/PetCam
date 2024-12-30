@@ -45,33 +45,33 @@ extern "C" void app_main(void)
   // 初始化搖桿
   joystick.init();
 
-  // while (1)
-  // {
-  //   // 讀取搖桿數值
-  //   joystick.read();
+  while (1)
+  {
+    // 讀取搖桿數值
+    joystick.read();
 
-  //   ESP_LOGI(TAG, "VRx: %d, VRy: %d, SW: %s", joystick.getVRxValue(), joystick.getVRyValue(), joystick.isSWPressed() ? "Pressed" : "Released");
+    ESP_LOGI(TAG, "VRx: %d, VRy: %d, SW: %s", joystick.getVRxValue(), joystick.getVRyValue(), joystick.isSWPressed() ? "Pressed" : "Released");
 
-  //   // 根據搖桿值控制步進電機
-  //   if (joystick.getVRxValue() > (4095 - JOYSTICK_THRESHOLD))
-  //   {
-  //     ESP_LOGI(TAG, "順時針旋轉");
-  //     stepper.rotate(5); // 旋轉小角度，根據實際情況調整
-  //   }
-  //   else if (joystick.getVRxValue() < JOYSTICK_THRESHOLD)
-  //   {
-  //     ESP_LOGI(TAG, "逆時針旋轉");
-  //     stepper.rotate(-5); // 旋轉小角度，根據實際情況調整
-  //   }
+    // 根據搖桿值控制步進電機
+    if (joystick.getVRxValue() > (4095 - JOYSTICK_THRESHOLD))
+    {
+      ESP_LOGI(TAG, "順時針旋轉");
+      stepper.rotate(5); // 旋轉小角度，根據實際情況調整
+    }
+    else if (joystick.getVRxValue() < JOYSTICK_THRESHOLD)
+    {
+      ESP_LOGI(TAG, "逆時針旋轉");
+      stepper.rotate(-5); // 旋轉小角度，根據實際情況調整
+    }
 
-  //   // 處理搖桿按鈕按下事件
-  //   if (joystick.isSWPressed())
-  //   {
-  //     ESP_LOGI(TAG, "搖桿按鈕按下");
+    // 處理搖桿按鈕按下事件
+    if (joystick.isSWPressed())
+    {
+      ESP_LOGI(TAG, "搖桿按鈕按下");
 
-  //     joystick.resetSWPressed(); // 重置按鈕狀態否則會一直觸發
-  //   }
+      joystick.resetSWPressed(); // 重置按鈕狀態否則會一直觸發
+    }
 
-  //   vTaskDelay(pdMS_TO_TICKS(50)); // 調整延遲時間，根據實際情況調整
-  // }
+    vTaskDelay(pdMS_TO_TICKS(50)); // 調整延遲時間，根據實際情況調整
+  }
 }
