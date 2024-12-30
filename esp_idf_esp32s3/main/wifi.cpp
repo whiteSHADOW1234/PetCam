@@ -26,6 +26,12 @@
 #endif
 #define EXAMPLE_ESP_MAXIMUM_RETRY  10
 
+// --- 靜態 IP 設定 ---
+#define EXAMPLE_ESP_WIFI_IP_ADDR ESP_IP4TOADDR(192, 168, 31, 168)   // 靜態 IP 位址
+#define EXAMPLE_ESP_WIFI_GW_ADDR ESP_IP4TOADDR(192, 168, 31, 1)     // 閘道器 IP 位址
+#define EXAMPLE_ESP_WIFI_NETMASK ESP_IP4TOADDR(255, 255, 255, 0)    // 子網路遮罩
+// ------------------------
+
 /* FreeRTOS event group to signal when we are connected*/
 static EventGroupHandle_t s_wifi_event_group;
 
@@ -79,7 +85,19 @@ void wifi_init_sta()
     ESP_ERROR_CHECK(esp_netif_init());
 
     ESP_ERROR_CHECK(esp_event_loop_create_default());
-    esp_netif_create_default_wifi_sta();
+    // --- 原本的預設 Wi-Fi station 建立方式 ---
+    // esp_netif_create_default_wifi_sta();
+    
+    // --- 靜態 IP 設定 ---
+    esp_netif_t *esp_netif = esp_netif_create_default_wifi_sta(); // 建立預設的 Wi-Fi station 網路介面
+
+    // 設定靜態 IP 位址
+    esp_netif_ip_info_t ip_info;
+    ip_info.ip.addr = EXAMPLE_ESP_WIFI_IP_ADDR;
+    ip_info.gw.addr = EXAMPLE_ESP_WIFI_GW_ADDR;
+    ip_info.netmask.addr = EXAMPLE_ESP_WIFI_NETMASK;
+    esp_netif_dhcpc_stop(esp_netif); // 停止 DHCP 客戶端
+    esp_netif_set_ip_info(esp_netif, &ip_info); // 設定靜態 IP
 
     wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT();
     ESP_ERROR_CHECK(esp_wifi_init(&cfg));
@@ -104,7 +122,7 @@ void wifi_init_sta()
             /* Setting a password implies station will connect to all security modes including WEP/WPA.
              * However these modes are deprecated and not advisable to be used. Incase your Access point
              * doesn't support WPA2, these mode can be enabled by commenting below line */
-	    //  .threshold.authmode = WIFI_AUTH_WPA2_PSK,
+	        .threshold{.authmode = WIFI_AUTH_WPA2_PSK},
 
             .pmf_cfg = {
                 .capable = true,

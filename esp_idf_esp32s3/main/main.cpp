@@ -50,7 +50,7 @@ extern "C" void app_main(void)
     // 讀取搖桿數值
     joystick.read();
 
-    ESP_LOGI(TAG, "VRx: %d, VRy: %d, SW: %s", joystick.getVRxValue(), joystick.getVRyValue(), joystick.isSWPressed() ? "Pressed" : "Released");
+    // ESP_LOGI(TAG, "VRx: %d, VRy: %d, SW: %s", joystick.getVRxValue(), joystick.getVRyValue(), joystick.isSWPressed() ? "Pressed" : "Released");
 
     // 根據搖桿值控制步進電機
     if (joystick.getVRxValue() > (4095 - JOYSTICK_THRESHOLD))

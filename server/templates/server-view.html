@@ -97,15 +97,15 @@
 <body>
     <div class="container">
         <h1>Pet Cam View</h1>
-        <div class="input-group">
-            <label for="esp32IpInput">ESP32 IP Address:</label>
-            <input type="text" id="esp32IpInput" placeholder="Enter ESP32 IP" value="192.168.31.167">
-            <button id="connectButton" class="connect-button">Connect to ESP32</button>
-        </div>
-        <div id="statusMessage"></div>
         <div class="video-wrapper">
             <video id="remoteVideo" autoplay playsinline></video>
         </div>
+        <div class="input-group">
+            <label for="esp32IpInput">ESP32 IP Address:</label>
+            <input type="text" id="esp32IpInput" placeholder="Enter ESP32 IP" value="192.168.31.168">
+            <button id="connectButton" class="connect-button">Connect to ESP32</button>
+        </div>
+        <div id="statusMessage" aria-placeholder="statusMessage"></div>
         <div class="button-container">
             <button id="clockwiseButton" class="control-button" disabled>Turn Right</button>
             <button id="counterClockwiseButton" class="control-button" disabled>Turn Left</button>
@@ -114,6 +114,8 @@
     </div>
     <script src="/client/server-view/script.js"></script> <script>
         let esp32Ip = ''; // 儲存 ESP32 的 IP 位址
+        const defaultEsp32Ip = '192.168.31.168'; // 預設 ESP32 IP 位址
+
         const esp32IpInput = document.getElementById('esp32IpInput');
         const connectButton = document.getElementById('connectButton');
         const clockwiseButton = document.getElementById('clockwiseButton');
@@ -207,10 +209,13 @@
             setButtonState(clockwiseButton, false);
             setButtonState(counterClockwiseButton, false);
             setButtonState(disconnectButton, false);
-            esp32Ip = '';
             setButtonState(connectButton, true);
             esp32IpInput.disabled = false;
-            esp32IpInput.value = '';
+        });
+
+        // 頁面載入時自動嘗試連線
+        window.addEventListener('load', () => {
+            testEsp32Connection(defaultEsp32Ip);
         });
     </script>
 </body>
