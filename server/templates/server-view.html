@@ -42,7 +42,7 @@
             /* Prevent white flash before video loads */
         }
 
-        .control-button, .connect-button, .disconnect-button {
+        .control-button {
             background-color: #4CAF50;
             border: none;
             color: white;
@@ -57,33 +57,17 @@
             transition: background-color 0.3s;
         }
 
-        .control-button:hover, .connect-button:hover, .disconnect-button:hover {
+        .control-button:hover {
             background-color: #45a049;
         }
 
-        .control-button:disabled, .disconnect-button:disabled {
+        .control-button:disabled {
             background-color: #ccc;
             cursor: default;
         }
 
         .button-container {
             margin-top: 20px;
-        }
-
-        .input-group {
-            margin-bottom: 10px;
-        }
-
-        .input-group label {
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        .input-group input {
-            width: 200px;
-            padding: 5px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
         }
 
         #statusMessage {
@@ -100,27 +84,19 @@
         <div class="video-wrapper">
             <video id="remoteVideo" autoplay playsinline></video>
         </div>
-        <div class="input-group">
-            <label for="esp32IpInput">ESP32 IP Address:</label>
-            <input type="text" id="esp32IpInput" placeholder="Enter ESP32 IP" value="192.168.31.168">
-            <button id="connectButton" class="connect-button">Connect to ESP32</button>
-        </div>
         <div id="statusMessage" aria-placeholder="statusMessage"></div>
         <div class="button-container">
             <button id="clockwiseButton" class="control-button" disabled>Turn Right</button>
             <button id="counterClockwiseButton" class="control-button" disabled>Turn Left</button>
-            <button id="disconnectButton" class="disconnect-button" disabled>Disconnect</button>
         </div>
     </div>
-    <script src="/client/server-view/script.js"></script> <script>
-        let esp32Ip = ''; // 儲存 ESP32 的 IP 位址
-        const defaultEsp32Ip = '192.168.31.168'; // 預設 ESP32 IP 位址
+    <script src="/client/server-view/script.js"></script>
+    <script>
+        // 預設 ESP32 IP 位址，請根據您的實際情況修改
+        const defaultEsp32Ip = '192.168.31.168';
 
-        const esp32IpInput = document.getElementById('esp32IpInput');
-        const connectButton = document.getElementById('connectButton');
         const clockwiseButton = document.getElementById('clockwiseButton');
         const counterClockwiseButton = document.getElementById('counterClockwiseButton');
-        const disconnectButton = document.getElementById('disconnectButton');
         const statusMessage = document.getElementById('statusMessage');
 
         // 更新狀態訊息的函數
@@ -144,73 +120,31 @@
                     updateStatus(`ESP32 Connected: ${responseData}`);
                     setButtonState(clockwiseButton, true);
                     setButtonState(counterClockwiseButton, true);
-                    setButtonState(disconnectButton, true);
-                    esp32Ip = ip; // 儲存 IP 位址
-                    setButtonState(connectButton, false);
-                    esp32IpInput.disabled = true;
                 } else {
                     updateStatus('ESP32 connection failed');
                     setButtonState(clockwiseButton, false);
                     setButtonState(counterClockwiseButton, false);
-                    setButtonState(disconnectButton, false);
-                    esp32Ip = '';
-                    setButtonState(connectButton, true);
-                    esp32IpInput.disabled = false;
                 }
             } catch (error) {
                 console.error('Error testing ESP32 connection:', error);
                 updateStatus('ESP32 connection error');
                 setButtonState(clockwiseButton, false);
                 setButtonState(counterClockwiseButton, false);
-                setButtonState(disconnectButton, false);
-                esp32Ip = '';
-                setButtonState(connectButton, true);
-                esp32IpInput.disabled = false;
             }
         }
 
-        // 連線按鈕點擊事件
-        connectButton.addEventListener('click', () => {
-            const ip = esp32IpInput.value;
-            if (ip) {
-                testEsp32Connection(ip);
-            } else {
-                updateStatus('Please enter an IP address');
-            }
-        });
-
         // 順時針按鈕點擊事件
         document.getElementById('clockwiseButton').addEventListener('click', () => {
-            if (esp32Ip) {
-                // 使用 HTTPS 發送控制指令
-                fetch(`/control-motor?direction=clockwise&ip=${esp32Ip}`, { method: 'POST' })
-                    .then(response => console.log('Clockwise command sent!'))
-                    .catch(error => console.error('Error sending command:', error));
-            } else {
-                updateStatus('ESP32 IP not set');
-            }
+            fetch(`/control-motor?direction=clockwise&ip=${defaultEsp32Ip}`, { method: 'POST' })
+                .then(response => console.log('Clockwise command sent!'))
+                .catch(error => console.error('Error sending command:', error));
         });
 
         // 逆時針按鈕點擊事件
         document.getElementById('counterClockwiseButton').addEventListener('click', () => {
-            if (esp32Ip) {
-                // 使用 HTTPS 發送控制指令
-                fetch(`/control-motor?direction=counterclockwise&ip=${esp32Ip}`, { method: 'POST' })
-                    .then(response => console.log('Counter clockwise command sent!'))
-                    .catch(error => console.error('Error sending command:', error));
-            } else {
-                updateStatus('ESP32 IP not set');
-            }
-        });
-
-        // 斷開連線按鈕點擊事件
-        disconnectButton.addEventListener('click', () => {
-            updateStatus('Disconnected from ESP32');
-            setButtonState(clockwiseButton, false);
-            setButtonState(counterClockwiseButton, false);
-            setButtonState(disconnectButton, false);
-            setButtonState(connectButton, true);
-            esp32IpInput.disabled = false;
+            fetch(`/control-motor?direction=counterclockwise&ip=${defaultEsp32Ip}`, { method: 'POST' })
+                .then(response => console.log('Counter clockwise command sent!'))
+                .catch(error => console.error('Error sending command:', error));
         });
 
         // 頁面載入時自動嘗試連線
