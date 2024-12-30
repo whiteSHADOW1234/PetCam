@@ -162,11 +162,9 @@ const HOST = '0.0.0.0';
 
 server.listen(PORT, HOST, () => {
     const ipAddresses = getAccessibleIpAddresses();
-    console.log(`Server started on https://${HOST}:${PORT}`);
 
-    ipAddresses.forEach(ipAddress => {
-        console.log(`Accessible URLs for IP address ${ipAddress}:`);
-        console.log(`- Open Cam: https://${ipAddress}:${PORT}/client/open-cam`);
-        console.log(`- Server View: https://${ipAddress}:${PORT}/server-view`);
-    });
+    console.log(`Server & Client started`);
+    console.log(`- Server View: https://${ipAddresses[0]}:${PORT}/server-view`);
+    console.log(`- Open Cam: https://${ipAddresses[ipAddresses.length - 1]}:${PORT}/client/open-cam`);
+
 });
