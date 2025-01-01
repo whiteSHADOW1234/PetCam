@@ -20,12 +20,26 @@ PetCam/
 │ └── templates/
 │   ├── index.html # Server landing page
 │   └── server-view.html # Website to view stream
-└── client/
-  └── open-cam/
-    ├── index.html # Website to start camera
-    └── script.js # JavaScript to handle camera, WebRTC, and streaming
-      └── server-view/
-        └── script.js # JavaScript for WebRTC receiving logic
+├── client/
+│ └── open-cam/
+│   ├── index.html # Website to start camera
+│   └── script.js # JavaScript to handle camera, WebRTC, and streaming
+│     └── server-view/
+│       └── script.js # JavaScript for WebRTC receiving logic
+└── esp_idf_esp32s3/
+  ├── .devcontainer/
+  ├── test/
+  └── main/
+    ├── CMakeLists.txt
+    ├── http.cpp
+    ├── http.h
+    ├── joystick.cpp
+    ├── joystick.h
+    ├── main.cpp
+    ├── wifi.cpp
+    ├── wifi.h
+    ├── ULN2003.cpp
+    └── ULN2003.h
 ```
 
 ## Prerequisites
