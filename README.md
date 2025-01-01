@@ -7,6 +7,7 @@ This project implements a real-time pet camera application with the following fe
 *   **Remote Pan Control:** Enables remote control of a pan mechanism (using an ESP32-S3, stepper motor, and joystick) to change the camera's viewing direction.
 *   **Talk to Pet:** Functionality to enable the viewer to transmit their voice to the pet through the webcam device.
 *   **HTTPS:** Uses HTTPS to ensure secure communication.
+*   **Repurpose Unused Smartphones:**  With the increasing number of unused smartphones in many households, this project provides a practical way to repurpose these devices as remote webcams, reducing electronic waste and providing added value.
 
 ## Project Structure
 
@@ -220,6 +221,7 @@ The `test` folder contains code for testing individual components:
 
 ## Important Notes
 
+*   **Repurposing Smartphones:** This project provides a great way to utilize old or unused smartphones as webcams, reducing electronic waste and giving them a new purpose.
 *   **HTTPS:** HTTPS is required for accessing `getUserMedia` in most browsers. The self-signed certificate is for development only.
 *   **Performance:** This project uses a simple WebRTC implementation for testing. Performance might be limited, especially with multiple clients. Consider using a dedicated media server for production.
 *   **Audio:** The audio in this project is unidirectional from the `server-view` to the `open-cam`. Implementing bi-directional audio requires further development.
