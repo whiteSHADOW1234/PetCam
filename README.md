@@ -1,4 +1,4 @@
-# PetCam: Real-time Webcam Streaming with Remote Pan Control
+# PetCam: Your Remote Real-time Pet Monitoring Solution
 
 This project implements a real-time pet camera application with the following features:
 
