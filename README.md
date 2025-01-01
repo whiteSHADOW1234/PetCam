@@ -46,23 +46,23 @@ pet-camera-project/
 *   **ESP32-S3 Development Board:**
     *   Model: **Goouuu ESP32-S3 N16R8** (16MB flash/8MB PSRAM, dual Type-C USB, W2812 RGB).
     *   Used for controlling the stepper motor and handling HTTP requests for motor control.
-    *   [Image Source](https://www.taiwansensor.com.tw/wp-content/uploads/2023/12/O1CN01Zmz8W21kAXm0aySdE_672934643.jpg)
+       ![Image Source](https://www.taiwansensor.com.tw/wp-content/uploads/2023/12/O1CN01Zmz8W21kAXm0aySdE_672934643.jpg)
 *   **28BYJ-48 Stepper Motor with ULN2003 Driver Board:**
     *   Used for panning the camera.
-    *   [Image Source](https://m.media-amazon.com/images/I/61Ml9ebd2kL._AC_UF894,1000_QL80_.jpg)
+       ![Image Source](https://m.media-amazon.com/images/I/61Ml9ebd2kL._AC_UF894,1000_QL80_.jpg)
 *   **Joystick Module:**
     *   Used to control the direction of the stepper motor.
-    *   [Image Source](https://down-br.img.susercontent.com/file/bcf905ecd9ff177fde7f4fbcafc9c400)
+       ![Image Source](https://down-br.img.susercontent.com/file/bcf905ecd9ff177fde7f4fbcafc9c400)
 *   **Power Supply Module:**
     *   Dedicated power supply for the stepper motor (requires 7-12V DC).
-    *   [Image Source](https://http2.mlstatic.com/D_613161-MLA47599398871_092021-C.jpg)
+       ![Image Source](https://http2.mlstatic.com/D_613161-MLA47599398871_092021-C.jpg)
 
 ## Software Prerequisites
 
-*   **Node.js and npm:** Install Node.js and npm from [https://nodejs.org/](https://nodejs.org/).
+*   **Node.js and npm:** Install Node.js and npm from [link](https://nodejs.org/).
 *   **OpenSSL:** Used to generate a self-signed certificate. Usually pre-installed on Linux/macOS. For Windows, it can be installed with Git for Windows or separately. Verify with `openssl version`.
-*   **VS Code with ESP-IDF Extension:** Follow the instructions here to install the ESP-IDF extension for VS Code: [https://marketplace.visualstudio.com/items?itemName=espressif.esp-idf-extension](https://marketplace.visualstudio.com/items?itemName=espressif.esp-idf-extension)
-*   **Git:** Install Git for version control: [https://git-scm.com/](https://git-scm.com/)
+*   **VS Code with ESP-IDF Extension:** Follow the instructions here to install the ESP-IDF extension for VS Code: [link](https://marketplace.visualstudio.com/items?itemName=espressif.esp-idf-extension)
+*   **Git:** Install Git for version control: [link](https://git-scm.com/)
 *   **Web Browser:** A modern web browser with WebRTC support (e.g., Brave, Firefox, or Edge, **but not Chrome**).
 
 ## Installation and Setup
