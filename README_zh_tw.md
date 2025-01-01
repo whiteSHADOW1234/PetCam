@@ -1,4 +1,4 @@
-# PetCam：基於 WebRTC 技術的即時寵物攝影機（可搭配硬體實現遠端轉動）
+# PetCam：基於 WebRTC 技術的即時寵物攝影機
 [**English README**](README.md) | [**ESP32-S3 Firmware Guide**](esp_idf_esp32s3/README_hardware.md) | [**ESP32-S3 設定指南**](esp_idf_esp32s3/README_hardware_zh_tw.md)
 
 此專案實作了一個即時寵物攝影機應用程式，具有以下功能：
