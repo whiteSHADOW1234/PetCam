@@ -1,3 +1,6 @@
+## ESP32-S3 Firmware (esp_idf_esp32s3)
+本節說明使用 ESP32-S3 韌體的相關資訊，它負責根據搖桿和遠端網頁介面的輸入控制馬達。
+
 ## 程式碼
 *   **main**: 存放主要程式碼
     *   **http.cpp/http.h**: 處理 HTTP 伺服器相關邏輯。
@@ -21,13 +24,12 @@
 ## 安裝
 
 1. **在VS Code安裝 ESP-IDF**:
-    請按照 ESP-IDF Extension for VS Code Overview安裝 ESP-IDF 開發環境：[https://marketplace.visualstudio.com/items?itemName=espressif.esp-idf-extension](https://marketplace.visualstudio.com/items?itemName=espressif.esp-idf-extension)
+    請按照 ESP-IDF Extension for VS Code Overview安裝 ESP-IDF 開發環境：[link](https://marketplace.visualstudio.com/items?itemName=espressif.esp-idf-extension)
 
 2. **取得專案程式碼**:
-<!-- todo: 取得專案程式碼方法-->
     ```bash
-    git clone <repository_url>
-    cd <project_name>
+    git clone https://github.com/whiteSHADOW1234/PetCam.git
+    cd esp_idf_esp32s3
     ```
 
 3. **設定 Wi-Fi 資訊**:
@@ -61,8 +63,7 @@
 
     在 VS Code 中，按下 `Ctrl+Shift+P`，輸入 `ESP-IDF: Build, Flash and Start a Monitor on your Device`。
 4. **連接到 Wi-Fi**:
-    <!-- todo: Server-View加入IP輸入框 -->
-    程式會在序列埠輸出 ESP32S3 的 IP 位址，請將其輸入到Server-View中和ESP32S3連線，之後按下按鈕，步進馬達將會旋轉。
+    Server-View 的程式會自動和 ESP32S3 連線，按下`左/右轉`按鈕，遠端的步進馬達將會旋轉。
 ## 接線
 
 **28BYJ-48 步進馬達 (使用 ULN2003 驅動):**
@@ -87,16 +88,15 @@
 | VRx      | GPIO1 (ADC1_0) |
 | VRy      | GPIO2 (ADC1_1) |
 | SW       | GPIO4          |
+
+> [!IMPORTANT]
+>
+> *   ESP32S3 開發板的 GPIO 編號可能因板而異，請參考你的開發板的引腳圖。
+> *   搖桿模組的 VRx 和 VRy 連接到支援 ADC 的 GPIO。
+
 ## 照片
-
-<!-- todo: 接線更新照片和操作影片 -->
-![Imgur Image](https://imgur.com/8PnjpOG.jpg)
-![Imgur Image](https://imgur.com/C6VxlT2.jpg)
-
-**注意:**
-
-*   ESP32S3 開發板的 GPIO 編號可能因板而異，請參考你的開發板的引腳圖。
-*   搖桿模組的 VRx 和 VRy 連接到支援 ADC 的 GPIO。
+![Wiring Diagram](https://imgur.com/8PnjpOG.jpg)
+![Hardware Setup](https://imgur.com/C6VxlT2.jpg)
 
 ## test 資料夾使用方法
 把 `test` 資料夾中的 `*.cpp` 內容複製到 `main.cpp` 檔案中並且編譯執行。
