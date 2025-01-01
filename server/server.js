@@ -96,7 +96,7 @@ app.get('/server-view', (req, res) => {
 });
 
 // --- Function to Get All Accessible IP Addresses ---
-function getAccessibleIpAddresses() {
+function getNetworkInterfaces() {
     const interfaces = os.networkInterfaces();
     const ipAddresses = [];
 
@@ -104,7 +104,10 @@ function getAccessibleIpAddresses() {
         const iface = interfaces[interfaceName];
         for (const alias of iface) {
             if (alias.family === 'IPv4' && alias.address !== '127.0.0.1' && !alias.internal) {
-                ipAddresses.push(alias.address);
+                ipAddresses.push({
+                    name: interfaceName,
+                    address: alias.address
+                });
             }
         }
     }
@@ -161,10 +164,14 @@ const PORT = process.env.PORT || 5000;
 const HOST = '0.0.0.0';
 
 server.listen(PORT, HOST, () => {
-    const ipAddresses = getAccessibleIpAddresses();
+    const ipAddresses = getNetworkInterfaces();
 
-    console.log(`Server & Client started`);
-    console.log(`- Server View: https://${ipAddresses[0]}:${PORT}/server-view`);
-    console.log(`- Open Cam: https://${ipAddresses[ipAddresses.length - 1]}:${PORT}/client/open-cam`);
+    ipAddresses.forEach(interface => {
+        if (interface.name === 'Wi-Fi') {
+            console.log(`- Open Cam: https://${interface.address}:${PORT}/client/open-cam`);
+        } else if (interface.name === 'Ethernet') {
+            console.log(`- Server View: https://${interface.address}:${PORT}/server-view`);
+        }
+    });
 
 });
