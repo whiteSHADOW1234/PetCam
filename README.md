@@ -1,5 +1,9 @@
 # PetCam: Your Remote Real-time Pet Monitoring Solution
-[**中文 README**](README_zh_tw.md) | [**ESP32-S3 Firmware Guide**](esp_idf_esp32s3/README_hardware.md) | [**ESP32-S3 設定指南**](esp_idf_esp32s3/README_hardware_zh_tw.md)
+<p align="center">
+    <a href="README_zh_tw.md"><strong>中文 README</strong></a> | 
+    <a href="esp_idf_esp32s3/README_hardware.md"><strong>ESP32-S3 Firmware Guide</strong></a> | 
+    <a href="esp_idf_esp32s3/README_hardware_zh_tw.md"><strong>ESP32-S3 設定指南</strong></a>
+</p>
 
 This project implements a real-time pet camera application with the following features:
 
